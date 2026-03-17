@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.Payment>
+
+@{
+    ViewData["Title"] = "All Payments";
+}
+
+<h1>All Payments</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Appointment Id</th>
+            <th>Service</th>
+            <th>Coach</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Paid At</th>
+            <th>Method</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AppointmentId</td>
+                <td>@item.Appointment?.TrainingService?.Name</td>
+                <td>@item.Appointment?.Coach?.User?.FullName</td>
+                <td>@item.Amount</td>
+                <td>@item.Status</td>
+                <td>@item.PaidAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.PaymentMethod</td>
+            </tr>
+        }
+    </tbody>
+</table>

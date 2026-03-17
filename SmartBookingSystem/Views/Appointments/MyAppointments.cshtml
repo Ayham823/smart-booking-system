@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.Appointment>
+
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<h1>My Appointments</h1>
+
+<p>
+    <a asp-action="Book" class="btn btn-primary">Book New Appointment</a>
+</p>
+
+<div id="appointmentsTableContainer">
+    <partial name="_MyAppointmentsTablePartial" model="Model" />
+</div>
+
+<div id="appointmentsMessage" class="mt-3"></div>
+
+@section Scripts {
+    <script>
+        async function loadAppointmentsTable() {
+            const response = await fetch('/Appointments/MyAppointmentsPartial');
+            const html = await response.text();
+            document.getElementById('appointmentsTableContainer').innerHTML = html;
+            bindCancelButtons();
+        }
+
+        async function cancelAppointment(id) {
+            const response = await fetch('/Appointments/AjaxCancel?id=' + id, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+            const messageDiv = document.getElementById('appointmentsMessage');
+
+            if (data.success) {
+                messageDiv.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+                await loadAppointmentsTable();
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+            }
+        }
+
+        function bindCancelButtons() {
+            const buttons = document.querySelectorAll('.ajax-cancel-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('Are you sure you want to cancel this appointment?')) {
+                        await cancelAppointment(id);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            bindCancelButtons();
+        });
+    </script>
+}

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.Appointment>
+@using SmartBookingSystem.Enums
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Coach</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrainingService?.Name</td>
+                <td>@item.Coach?.User?.FullName</td>
+                <td>@item.StartDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Status</td>
+                <td>@item.Notes</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+
+                    @if (item.Status != AppointmentStatus.Cancelled)
+                    {
+                        <a asp-controller="Payments" asp-action="Pay" asp-route-appointmentId="@item.Id" class="btn btn-success btn-sm">Pay</a>
+                        <button type="button" class="btn btn-danger btn-sm ajax-cancel-btn" data-id="@item.Id">Cancel</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

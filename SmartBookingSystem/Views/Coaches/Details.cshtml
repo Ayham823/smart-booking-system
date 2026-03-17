@@ -1,0 +1,35 @@
+﻿@model SmartBookingSystem.Models.Coach
+
+@{
+    ViewData["Title"] = "Coach Details";
+}
+
+<h1>Coach Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Full Name</dt>
+        <dd class="col-sm-9">@Model.User?.FullName</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.User?.Email</dd>
+
+        <dt class="col-sm-3">Specialty</dt>
+        <dd class="col-sm-9">@Model.Specialty</dd>
+
+        <dt class="col-sm-3">Bio</dt>
+        <dd class="col-sm-9">@Model.Bio</dd>
+
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">@Model.IsActive</dd>
+    </dl>
+</div>
+
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</div>

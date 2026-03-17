@@ -1,0 +1,42 @@
+﻿@model SmartBookingSystem.Models.Appointment
+@using SmartBookingSystem.Enums
+
+@{
+    ViewData["Title"] = "Update Appointment Status";
+}
+
+<h1>Update Appointment Status</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">User</dt>
+        <dd class="col-sm-9">@Model.User?.Email</dd>
+
+        <dt class="col-sm-3">Coach</dt>
+        <dd class="col-sm-9">@Model.Coach?.User?.FullName</dd>
+
+        <dt class="col-sm-3">Service</dt>
+        <dd class="col-sm-9">@Model.TrainingService?.Name</dd>
+
+        <dt class="col-sm-3">Start</dt>
+        <dd class="col-sm-9">@Model.StartDateTime.ToString("yyyy-MM-dd HH:mm")</dd>
+    </dl>
+</div>
+
+<form asp-action="UpdateStatus" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            <option value="@AppointmentStatus.Pending">Pending</option>
+            <option value="@AppointmentStatus.Confirmed">Confirmed</option>
+            <option value="@AppointmentStatus.Cancelled">Cancelled</option>
+            <option value="@AppointmentStatus.Completed">Completed</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

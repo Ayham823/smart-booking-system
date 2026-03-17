@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Manage Appointments";
+}
+
+<h1>Manage Appointments</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Coach</th>
+            <th>Service</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User?.Email</td>
+                <td>@item.Coach?.User?.FullName</td>
+                <td>@item.TrainingService?.Name</td>
+                <td>@item.StartDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Status</td>
+                <td>@(item.Payment != null ? item.Payment.Status.ToString() : "No Payment")</td>
+                <td>
+                    <a asp-action="UpdateStatus" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Update Status</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

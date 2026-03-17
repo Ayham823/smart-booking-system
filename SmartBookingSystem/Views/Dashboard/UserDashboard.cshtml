@@ -1,0 +1,26 @@
+﻿@model SmartBookingSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "User Dashboard";
+}
+
+<h1>User Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="card p-3">
+            <h5>My Appointments</h5>
+            <h2>@Model.MyAppointments</h2>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card p-3">
+            <h5>My Payments</h5>
+            <h2>@Model.MyPayments</h2>
+        </div>
+    </div>
+</div>
+<div class="mt-3">
+    <a asp-controller="Appointments" asp-action="MyAppointments" class="btn btn-primary">My Appointments</a>
+    <a asp-controller="Payments" asp-action="MyPayments" class="btn btn-success">My Payments</a>
+</div>

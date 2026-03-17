@@ -1,0 +1,130 @@
+﻿@model SmartBookingSystem.ViewModels.BookAppointmentViewModel
+
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+
+<h1>Book Appointment</h1>
+
+<div id="bookingMessage"></div>
+
+<form id="ajaxBookingForm">
+    <div class="mb-3">
+        <label asp-for="TrainingServiceId" class="form-label"></label>
+        <select asp-for="TrainingServiceId" class="form-select" id="serviceSelect">
+            <option value="">-- Select Service --</option>
+            @foreach (var service in Model.Services)
+            {
+                <option value="@service.Id">@service.Name - @service.DurationInMinutes min - @service.Price</option>
+            }
+        </select>
+        <span asp-validation-for="TrainingServiceId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CoachId" class="form-label"></label>
+        <select asp-for="CoachId" class="form-select" id="coachSelect">
+            <option value="">-- Select Coach --</option>
+            @foreach (var coach in Model.Coaches)
+            {
+                <option value="@coach.Id">@coach.User?.FullName - @coach.Specialty</option>
+            }
+        </select>
+        <span asp-validation-for="CoachId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Date" class="form-label"></label>
+        <input asp-for="Date" class="form-control" type="date" id="dateInput" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+
+    <div id="availableSlotsContainer" class="mb-3"></div>
+
+    <input type="hidden" id="selectedStartTime" />
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control" id="notesInput"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Book with Ajax</button>
+    <a asp-action="MyAppointments" class="btn btn-secondary">My Appointments</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        async function loadAvailableSlots() {
+            const coachId = document.getElementById('coachSelect').value;
+            const serviceId = document.getElementById('serviceSelect').value;
+            const date = document.getElementById('dateInput').value;
+            const container = document.getElementById('availableSlotsContainer');
+            document.getElementById('selectedStartTime').value = '';
+
+            if (!coachId || !serviceId || !date) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const url = `/Appointments/GetAvailableSlots?coachId=${coachId}&serviceId=${serviceId}&date=${date}`;
+            const response = await fetch(url);
+            const html = await response.text();
+            container.innerHTML = html;
+
+            const slotSelect = document.getElementById('availableSlotSelect');
+            if (slotSelect) {
+                slotSelect.addEventListener('change', function () {
+                    document.getElementById('selectedStartTime').value = this.value;
+                });
+            }
+        }
+
+        async function submitAjaxBooking(event) {
+            event.preventDefault();
+
+            const messageDiv = document.getElementById('bookingMessage');
+
+            const payload = {
+                trainingServiceId: parseInt(document.getElementById('serviceSelect').value),
+                coachId: parseInt(document.getElementById('coachSelect').value),
+                date: document.getElementById('dateInput').value,
+                startTime: document.getElementById('selectedStartTime').value,
+                notes: document.getElementById('notesInput').value
+            };
+
+            if (!payload.trainingServiceId || !payload.coachId || !payload.date || !payload.startTime) {
+                messageDiv.innerHTML = '<div class="alert alert-danger">Please select service, coach, date, and available time.</div>';
+                return;
+            }
+
+            const response = await fetch('/Appointments/AjaxBook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                messageDiv.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+                document.getElementById('ajaxBookingForm').reset();
+                document.getElementById('availableSlotsContainer').innerHTML = '';
+                document.getElementById('selectedStartTime').value = '';
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('serviceSelect').addEventListener('change', loadAvailableSlots);
+            document.getElementById('coachSelect').addEventListener('change', loadAvailableSlots);
+            document.getElementById('dateInput').addEventListener('change', loadAvailableSlots);
+            document.getElementById('ajaxBookingForm').addEventListener('submit', submitAjaxBooking);
+        });
+    </script>
+}

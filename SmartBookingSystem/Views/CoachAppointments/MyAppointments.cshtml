@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Coach My Appointments";
+}
+
+<h1>My Coach Appointments</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Service</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User?.Email</td>
+                <td>@item.TrainingService?.Name</td>
+                <td>@item.StartDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Status</td>
+                <td>@item.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>

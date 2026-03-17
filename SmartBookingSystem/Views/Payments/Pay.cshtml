@@ -1,0 +1,40 @@
+﻿@model SmartBookingSystem.Models.Appointment
+
+@{
+    ViewData["Title"] = "Pay Appointment";
+}
+
+<h1>Pay Appointment</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Service</dt>
+        <dd class="col-sm-9">@Model.TrainingService?.Name</dd>
+
+        <dt class="col-sm-3">Coach</dt>
+        <dd class="col-sm-9">@Model.Coach?.User?.FullName</dd>
+
+        <dt class="col-sm-3">Start</dt>
+        <dd class="col-sm-9">@Model.StartDateTime.ToString("yyyy-MM-dd HH:mm")</dd>
+
+        <dt class="col-sm-3">Amount</dt>
+        <dd class="col-sm-9">@Model.TrainingService?.Price</dd>
+    </dl>
+</div>
+
+<form asp-action="PayConfirmed" method="post">
+    <input type="hidden" name="appointmentId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Payment Method</label>
+        <select name="paymentMethod" class="form-select">
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Visa">Visa</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Confirm Payment</button>
+    <a asp-controller="Appointments" asp-action="MyAppointments" class="btn btn-secondary">Back</a>
+</form>

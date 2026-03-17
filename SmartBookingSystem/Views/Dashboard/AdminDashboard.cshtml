@@ -1,0 +1,52 @@
+﻿@model SmartBookingSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Services</h5>
+            <h2>@Model.TotalServices</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Coaches</h5>
+            <h2>@Model.TotalCoaches</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Appointments</h5>
+            <h2>@Model.TotalAppointments</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Payments</h5>
+            <h2>@Model.TotalPayments</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Audit Logs</h5>
+            <h2>@Model.TotalAuditLogs</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>Total Revenue</h5>
+            <h2>@Model.TotalRevenue</h2>
+        </div>
+    </div>
+
+</div>
+<div class="mt-3">
+    <a asp-controller="AdminAppointments" asp-action="Index" class="btn btn-primary">Manage Appointments</a>
+    <a asp-controller="Payments" asp-action="Index" class="btn btn-success">All Payments</a>
+    <a asp-controller="AuditLogs" asp-action="Index" class="btn btn-dark">Audit Logs</a>
+</div>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SmartBookingSystem.Models.AuditLog>
+
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<h1>Audit Logs</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Entity</th>
+            <th>Entity Id</th>
+            <th>Details</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User?.Email</td>
+                <td>@item.Action</td>
+                <td>@item.EntityName</td>
+                <td>@item.EntityId</td>
+                <td>@item.Details</td>
+                <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

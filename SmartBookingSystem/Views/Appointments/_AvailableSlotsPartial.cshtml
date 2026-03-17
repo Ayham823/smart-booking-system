@@ -1,0 +1,19 @@
+﻿@model List<SmartBookingSystem.ViewModels.AvailableSlotViewModel>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">No available time slots for the selected date.</div>
+}
+else
+{
+    <div class="mb-3">
+        <label for="availableSlotSelect" class="form-label">Available Time Slots</label>
+        <select id="availableSlotSelect" class="form-select">
+            <option value="">-- Select Available Time --</option>
+            @foreach (var slot in Model)
+            {
+                <option value="@slot.Value">@slot.Text</option>
+            }
+        </select>
+    </div>
+}
